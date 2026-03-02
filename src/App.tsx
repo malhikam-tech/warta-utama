@@ -151,16 +151,21 @@ export default function App() {
   const formatDate = () => {
     try {
       const options: Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      return new Date("2026-03-01T21:25:03-08:00").toLocaleDateString('id-ID', options);
+      // Use the current date if possible, fallback to the provided context date
+      const date = new Date("2026-03-01T21:25:03-08:00");
+      return date.toLocaleDateString('id-ID', options);
     } catch (e) {
       return "Minggu, 1 Maret 2026";
     }
   };
 
+  // Safe check for API key to prevent production crashes
+  const apiKeyExists = typeof process !== 'undefined' && process.env?.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== "";
+
   return (
     <div className="min-h-screen flex flex-col font-sans transition-colors duration-300 dark:bg-zinc-950 dark:text-zinc-100">
       {/* Top Bar */}
-      {(!process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY === "") && (
+      {!apiKeyExists && (
         <div className="bg-amber-500 text-amber-950 py-1 px-4 text-[10px] font-bold text-center uppercase tracking-widest">
           Peringatan: API Key Gemini belum dikonfigurasi. Beberapa fitur mungkin tidak berfungsi.
         </div>
