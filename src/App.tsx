@@ -149,13 +149,22 @@ export default function App() {
   };
 
   const formatDate = () => {
-    const options: Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date("2026-03-01T21:25:03-08:00").toLocaleDateString('id-ID', options);
+    try {
+      const options: Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      return new Date("2026-03-01T21:25:03-08:00").toLocaleDateString('id-ID', options);
+    } catch (e) {
+      return "Minggu, 1 Maret 2026";
+    }
   };
 
   return (
     <div className="min-h-screen flex flex-col font-sans transition-colors duration-300 dark:bg-zinc-950 dark:text-zinc-100">
       {/* Top Bar */}
+      {(!process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY === "") && (
+        <div className="bg-amber-500 text-amber-950 py-1 px-4 text-[10px] font-bold text-center uppercase tracking-widest">
+          Peringatan: API Key Gemini belum dikonfigurasi. Beberapa fitur mungkin tidak berfungsi.
+        </div>
+      )}
       <div className="bg-zinc-900 dark:bg-black text-white py-2 px-4 text-[10px] font-bold uppercase tracking-[0.2em] border-b border-white/5">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-4">
